@@ -11,6 +11,7 @@ use App\Http\Requests\CommentFormRequest;
 
 class CommentController extends Controller
 {
+
     public function save(CommentFormRequest $request, Comments $comments, User $user)
 	{
 		if (! request()->ajax()) {

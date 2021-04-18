@@ -1,6 +1,11 @@
 <template>
   <div class="post-app">
-    <h1>Posts</h1>
+    <div class="row">
+      <div class="col-md-10"><h1>Posts</h1></div>
+      <div id="new-post-link-wrapper" class="col-md-2 text-right">
+        <button class="btn btn-link" @click="addPost">New Post</button>
+      </div>
+    </div>
 
     <div id="posts-container" class="row">
       <div class="col-md-12">
@@ -29,6 +34,24 @@
           </tbody>
         </table>
 
+      </div>
+    </div>
+
+    <div id="post-form-container" class="row hide">
+      <h3>Add Post</h3>
+      <div class="col-md-10">
+        <input type="text" class="form-control" name="user" v-model="formPost.user" placeholder="Enter your name here..." />
+        <input type="text" class="form-control" name="title" v-model="formPost.title" placeholder="Enter title here..." />
+        <textarea name="comment" cols="30" rows="10"
+                  v-model="formPost.post"
+                  class="form-control"
+                  placeholder="Enter content here...">
+          </textarea>
+        <span v-if="errors.post" class="help-block text-danger">{{ errors.post[0] }}</span>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary btn-block" @click="onPostSubmit">Save</button>
+        <button class="btn btn-warning btn-block" @click="cancelPostSubmit">Cancel</button>
       </div>
     </div>
 
@@ -91,6 +114,11 @@ export default {
     return {
       postsObject: null,
       selected_post: "",
+      formPost: {
+        user: null,
+        title: null,
+        post: null
+      },
       form: {
         parent_id: null,
         user: null,
@@ -103,6 +131,22 @@ export default {
     this.fetch();
   },
   methods: {
+    addPost() {
+      $('#post-form-container').removeClass('hide');
+    },
+
+    onPostSubmit() {
+      Vue.axios.post('/api/posts', this.formPost)
+        .then((response) => {
+          $('#post-form-container').addClass('hide');
+          this.fetch();
+        })
+    },
+
+    cancelPostSubmit() {
+      $('#post-form-container').addClass('hide');
+    },
+
     fetch() {
       Vue.axios.get('/api/posts')
         .then((response) => {
@@ -185,5 +229,8 @@ export default {
    padding: 10px;
    margin-bottom: 10px;
    background-color: #F0F0F0;
+ }
+ #new-post-link-wrapper {
+   padding-top: 20px;
  }
 </style>

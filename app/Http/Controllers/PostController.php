@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostFormRequest;
 use App\Posts;
+use App\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -60,5 +62,35 @@ class PostController extends Controller
 		}
 
 		return collect($data);
+	}
+
+	public function save(PostFormRequest $request, Posts $posts)
+	{
+		if (! request()->ajax()) {
+			return null;
+		}
+
+		$fillable = $request->only(['title', 'post']);
+
+		$posted_by = $request->get('user');
+
+		$user_id = 0;
+
+		$response = ['success' => false];
+
+
+		if (! empty($posted_by)) {
+			$user_id = (User::where(['name' => $posted_by])->first())->id;
+		}
+
+		$fillable['user_id'] = $user_id;
+
+		$posts->fill($fillable);
+
+		if ($posts->save()) {
+			$response['success'] = true;
+		}
+
+		return response()->json($response);
 	}
 }

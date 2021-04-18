@@ -20,4 +20,5 @@ use Illuminate\Http\Request;
 Route::get('/posts', 'PostController@fetch');
 Route::get('/post/{post_id}', 'PostController@getPost');
 
+Route::post('/posts', 'PostController@save');
 Route::post('/comment', 'CommentController@save');
