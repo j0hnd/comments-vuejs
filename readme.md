@@ -14,7 +14,7 @@ Then follow these setup to setup the project on your local environment:
 - then run **php artisan db:seed**
 - lastly, run **npm run prod**
 
-## Scope
+## Scope and Limitations
 - validation errors not displayed
 - includes simple unit test
 - nested comment not fully implemented
