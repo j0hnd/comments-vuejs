@@ -45756,6 +45756,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       postsObject: null,
       selected_post: "",
+      selected_comment: 0,
       formPost: {
         user: null,
         title: null,
@@ -45764,7 +45765,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       form: {
         parent_id: null,
         user: null,
-        comment: null
+        comment: null,
+        source: null
       },
       errors: []
     };
@@ -45813,6 +45815,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     onSubmit: function onSubmit() {
       var _this4 = this;
 
+      if (parseInt(this.selected_comment)) {
+        this.form.parent_id = this.selected_comment;
+        this.form.source = 'comment';
+      } else {
+        this.form.source = 'post';
+      }
+
       Vue.axios.post('/api/comment', this.form).then(function (response) {
         if (response.data.success) {
           // this.$swal({
@@ -45830,8 +45839,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     cancelSubmit: function cancelSubmit() {
       $('#comment-form-wrapper').addClass('hide');
     },
-    showCommentForm: function showCommentForm() {
+    showCommentForm: function showCommentForm(comment_id) {
       $('#comment-form-wrapper').removeClass('hide');
+      this.selected_comment = comment_id;
     },
     closeCommentFormContainer: function closeCommentFormContainer() {
       $('#comment-form-container').addClass('hide');
@@ -46092,7 +46102,11 @@ var render = function() {
                         "button",
                         {
                           staticClass: "btn btn-link pull-right",
-                          on: { click: _vm.showCommentForm }
+                          on: {
+                            click: function($event) {
+                              return _vm.showCommentForm(comment.id)
+                            }
+                          }
                         },
                         [_vm._v("Reply")]
                       )

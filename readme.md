@@ -15,3 +15,5 @@ Then follow these setup to setup the project on your local environment:
 - lastly, run **npm run prod**
 
 ## Scope
+- validation errors not displayed
+- includes simple unit test

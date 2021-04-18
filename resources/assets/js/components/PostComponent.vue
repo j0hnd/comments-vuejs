@@ -80,7 +80,7 @@
             <p>{{ comment.comment }}</p>
           </div>
           <div class="col-md-12">
-            <button class="btn btn-link pull-right" @click="showCommentForm">Reply</button>
+            <button class="btn btn-link pull-right" @click="showCommentForm(comment.id)">Reply</button>
           </div>
         </div>
       </div>
@@ -114,6 +114,7 @@ export default {
     return {
       postsObject: null,
       selected_post: "",
+      selected_comment: 0,
       formPost: {
         user: null,
         title: null,
@@ -122,7 +123,8 @@ export default {
       form: {
         parent_id: null,
         user: null,
-        comment: null
+        comment: null,
+        source: null
       },
       errors: []
     }
@@ -173,6 +175,13 @@ export default {
     },
 
     onSubmit() {
+      if (parseInt(this.selected_comment)) {
+        this.form.parent_id = this.selected_comment;
+        this.form.source = 'comment';
+      } else {
+        this.form.source = 'post';
+      }
+
       Vue.axios
           .post('/api/comment', this.form)
           .then((response) => {
@@ -195,8 +204,9 @@ export default {
       $('#comment-form-wrapper').addClass('hide');
     },
 
-    showCommentForm() {
+    showCommentForm(comment_id) {
       $('#comment-form-wrapper').removeClass('hide');
+      this.selected_comment = comment_id;
     },
 
     closeCommentFormContainer() {

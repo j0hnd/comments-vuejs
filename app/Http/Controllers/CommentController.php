@@ -47,7 +47,7 @@ class CommentController extends Controller
 
 			$post->comments()->attach($post->id, [
 				'child_id' => $comments->id,
-				'source' => 'post',
+				'source' => $request->get('source'),
 			]);
 
 			$response = [
