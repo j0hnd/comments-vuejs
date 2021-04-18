@@ -17,3 +17,4 @@ Then follow these setup to setup the project on your local environment:
 ## Scope
 - validation errors not displayed
 - includes simple unit test
+- nested comment not fully implemented
